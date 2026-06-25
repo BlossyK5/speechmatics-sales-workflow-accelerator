@@ -38,6 +38,11 @@ Rather than replacing people, the goal is to remove repetitive administrative wo
 
 ---
 
+## Demo
+You can watch a LIVE VIDEO Demonstration of this app [HERE](https://drive.google.com/file/d/1_GLNedsUVrtkUop6jPwvX370grG1PBS3/view?usp=sharing)
+
+---
+
 ## Features
 
 ### Speech Recognition
@@ -207,9 +212,6 @@ http://localhost:3000
 5. Follow-up email is drafted
 6. Outputs are displayed in the UI
 
----
-## Demo
-You can watch a LIVE VIDEO Demonstration of this app [HERE](https://drive.google.com/file/d/1_GLNedsUVrtkUop6jPwvX370grG1PBS3/view?usp=sharing)
 
 ---
 
