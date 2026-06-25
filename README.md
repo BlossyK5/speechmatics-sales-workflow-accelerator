@@ -22,6 +22,10 @@ Customer Call Copilot enables users to upload an audio recording of a customer c
 The application combines Speechmatics' speech recognition capabilities with OpenAI's GPT models to produce business-ready outputs from natural conversations.
 
 ---
+## Demo
+You can watch a LIVE VIDEO Demonstration of this app [HERE](https://drive.google.com/file/d/1_GLNedsUVrtkUop6jPwvX370grG1PBS3/view?usp=sharing)
+
+---
 
 ## Why I Built This
 
@@ -35,11 +39,6 @@ This project explores how modern AI infrastructure can reduce that manual work b
 * Workflow automation
 
 Rather than replacing people, the goal is to remove repetitive administrative work so teams can spend more time building customer relationships.
-
----
-
-## Demo
-You can watch a LIVE VIDEO Demonstration of this app [HERE](https://drive.google.com/file/d/1_GLNedsUVrtkUop6jPwvX370grG1PBS3/view?usp=sharing)
 
 ---
 
