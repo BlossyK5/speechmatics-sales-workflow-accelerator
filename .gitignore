@@ -30,3 +30,5 @@ uploads/
 # macOS
 .DS_Store
 
+eval "$(ssh-agent-s)"
+eval "$(ssh-agent-s)".pub
