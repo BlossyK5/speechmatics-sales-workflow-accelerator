@@ -298,7 +298,7 @@ My interests sit at the intersection of:
 * Workflow Automation
 * Applied Large Language Models
 
-I'm particularly interested in building AI-powered products that integrate multiple services into seamless customer experiences.
+I'm particularly interested in AI-powered products that I can integrate using multiple services to create seamless customer experiences.
 
 ---
 
