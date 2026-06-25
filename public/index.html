@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Customer Call Copilot</title>
+  <style>
+
+    
+body {
+  font-family: Arial, sans-serif;
+  background: #eef7f2;
+  color: #111;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+.logo {
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #073b4c;
+}
+
+.hero {
+  margin-bottom: 32px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  max-width: 600px;
+  color: #444;
+  font-size: 18px;
+}
+
+.badge {
+  display: inline-block;
+  background: #dff3e8;
+  color: #08775b;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background:white;
+  padding: 24px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  border: 1px solid #d8e7df;
+}
+
+button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #073b4c;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+button:disabled {
+  background: #9aa7a1;
+  cursor: not-allowed;
+}
+
+.progress-tracker {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.step {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f3f7f5;
+  color: #666;
+}
+
+.step.active {
+  background: #dff3e8;
+  color: #08775b;
+  font-weight: bold;
+}
+
+.step.done {
+  background: #e6f6ee;
+  color: #08775b;
+}
+
+pre {
+  white-space: pre-wrap;
+  background: #f5f7f6;
+  padding: 16px;
+  border-radius: 8px;
+  min-height: 80px;
+}
+
+.demo-note {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-left: 4px solid #08775b;
+  background: #e6f6ee;
+  color: #064e3b;
+  border-radius: 8px;
+  max-width: 720px;
+}
+
+.step-one-card {
+  margin-top: 24px;
+}
+
+.step-one-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.step-one-header h2 {
+  margin: 0 0 8px;
+}
+
+.step-one-header p {
+  margin: 0;
+  color: #555;
+}
+
+.template-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.template-container label {
+  font-weight: 700;
+  font-size: 14px;
+  color: #073b4c;
+}
+
+.template-container select {
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid #d8e7df;
+  font-size: 15px;
+  background: white;
+}
+
+.upload-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+  </style>
+</head>
+
+
+<body>
+  <h1>Customer Call Copilot</h1>
+  <p class="subtitle">
+    Upload a customer call recording and generate a transcript, meeting notes, and sales follow-up email.
+  </p>
+
+  <p class="demo-note">
+  Demo project built on the Speechmatics Realtime API to explore how speech recognition can power customer intelligence workflows.
+  </p>
+
+   <div class="card step-one-card">
+     <div class="step-one-header">
+        <div>
+            <h2>1. Generate Transcript</h2>
+            <p>Upload your audio file and choose how you want the AI to analyse it.</p>
+         </div>
+    <button id="processBtn">Generate Transcript</button>
+
+    <div class="template-container">
+      <label for="templateSelect">Output Type</label>
+      <select id="templateSelect">
+        <option value="meeting">Meeting Notes</option>
+        <option value="sales">Sales Call</option>
+        <option value="interview">Interview</option>
+        <!-- <option value="lecture">Lecture</option> -->
+      </select>
+    </div>
+  </div>
+
+<div class="upload-row">
+    <input type="file" id="audioFile" accept="audio/*" />
+    <!-- <button id="processBtn">Generate Transcript</button> -->
+  </div>
+
+  <p id="status"></p>
+</div>
+
+
+  <div class="card">
+    <h2>2. Transcript</h2>
+    <pre id="transcript">Waiting for audio...</pre>
+  </div>
+
+  <div class="card">
+    <h2>3. Meeting Notes</h2>
+    <pre id="notes">Waiting for notes...</pre>
+  </div>
+
+  <div class="card">
+    <h2>4. Follow-up Email</h2>
+    <pre id="email">Waiting for email...</pre>
+    <button id="gmailBtn" disabled>Open in Gmail</button>
+  </div>
+
+  <div class="progress-tracker">
+  <div class="step" id="step-upload">○ Audio uploaded</div>
+  <div class="step" id="step-transcribe">○ Transcribing with Speechmatics</div>
+  <div class="step" id="step-notes">○ Generating meeting notes</div>
+  <div class="step" id="step-email">○ Drafting follow-up email</div>
+  <div class="step" id="step-gmail">○ Ready for Gmail</div>
+  </div>
+
+
+
+  <script>
+    
+    const processBtn = document.getElementById("processBtn");
+    const gmailBtn = document.getElementById("gmailBtn");
+    const statusText = document.getElementById("status");
+    const transcriptBox = document.getElementById("transcript");
+    const notesBox = document.getElementById("notes");
+    const emailBox = document.getElementById("email");
+
+    
+    
+
+    let generatedEmail = "";
+    
+    function updateStep(id, status) {
+        const step = document.getElementById(id);
+        step.classList.remove("active", "done");
+        
+        const cleanText = step.textContent.replace(/^○ |^✓ |^ /, "");
+        
+        if (status === "active") {
+            step.classList.add("active");
+            step.textContent = " " + cleanText;
+        }
+        
+        if (status === "done") {
+            step.classList.add("done");
+            step.textContent = "✓ " + cleanText;
+        }
+}
+
+    processBtn.addEventListener("click", async () => {
+        const fileInput = document.getElementById("audioFile");
+        const file = fileInput.files[0];
+        if (!file) {
+            alert("Please choose an audio file first.");
+            return;
+        }
+        // const template = document.getElementById("templateSelect").value;
+        // formData.append("template", template);
+
+        const formData = new FormData();
+        formData.append("audio", file);
+
+        processBtn.disabled = true;
+        statusText.textContent = "Processing audio... this may take a moment.";
+        
+    gmailBtn.addEventListener("click", () => {
+        if (!generatedEmail) {
+            alert("No email has been generated yet.");
+            return;
+        }
+        
+        const subject = "Follow-up from our conversation";
+        
+        const gmailUrl =
+        "https://mail.google.com/mail/?view=cm&fs=1" +
+         "&su=" + encodeURIComponent(subject) +
+         "&body=" + encodeURIComponent(generatedEmail);
+
+   window.open(gmailUrl, "_blank");
+});
+
+  // Reset tracker
+        document.querySelectorAll(".step").forEach(step => {
+            step.classList.remove("active", "done");
+            step.textContent = "○ " + step.textContent.replace(/^○ |^✓ |^ /, "");
+        });
+
+        try {
+            
+            updateStep("step-upload", "done");
+            updateStep("step-transcribe", "active");
+
+            const response = await fetch("/process-audio", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        updateStep("step-transcribe", "done");
+        updateStep("step-notes", "done");
+        updateStep("step-email", "done");
+        updateStep("step-gmail", "done");
+
+        transcriptBox.textContent =
+          data.transcript || "No transcript returned.";
+
+        notesBox.textContent =
+           data.meetingNotes || "No notes returned.";
+
+        emailBox.textContent =
+           data.followUpEmail || "No email returned.";
+
+        generatedEmail = data.followUpEmail || "";
+        gmailBtn.disabled = !generatedEmail;
+
+        statusText.textContent = "Done.";
+  }
+  
+  catch (error) {
+    console.error(error);
+    statusText.textContent = "Something went wrong.";
+  }
+  finally {
+    processBtn.disabled = false;
+  }
+});
+
+  </script>
+</body>
+</html>

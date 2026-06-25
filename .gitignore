@@ -1,0 +1,32 @@
+# Node
+node_modules/
+
+# Environment variables
+.env
+
+# old source codes
+generate-email.js
+generate-notes.js
+open-gmail-draft.js
+transcribe-file.js
+
+
+index.js
+
+#audio files
+*.wav
+*.m4a
+*.mp3
+*.webm
+
+#Generated Outputs
+transcript.txt
+meeting_notes.txt
+follow_up_email.txt
+
+# Uploaded audio
+uploads/
+
+# macOS
+.DS_Store
+
